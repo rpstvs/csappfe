@@ -34,3 +34,45 @@ function fetchItems(url, containerId) {
         })
         .catch(error => console.error('Error fetching data:', error));
 }
+
+function handleSearchInput(event) {
+    const query = event.target.value;
+
+    if (!query) {
+        closeAutocompleteList();
+        return;
+    }
+
+    fetch(`http://localhost:8080/api/skins/searchitem?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            displayAutocompleteSuggestions(data);
+        })
+        .catch(error => console.error('Error fetching autocomplete suggestions:', error));
+}
+
+function displayAutocompleteSuggestions(suggestions) {
+    closeAutocompleteList();
+    const list = document.getElementById("autocomplete-list");
+    list.innerHTML = "";
+
+    suggestions.forEach(suggestion => {
+        const itemDiv = document.createElement("div");
+        itemDiv.textContent = suggestion;
+        itemDiv.addEventListener("click", () => {
+            document.getElementById("search-bar").value = suggestion;
+            closeAutocompleteList();
+        });
+        list.appendChild(itemDiv);
+    });
+}
+
+function closeAutocompleteList() {
+    const list = document.getElementById("autocomplete-list");
+    list.innerHTML = "";
+}
+/*
+document.addEventListener("click", function(e) {
+    closeAutocompleteList();
+});
+*/
