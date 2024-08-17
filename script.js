@@ -23,8 +23,11 @@ function fetchItems(url, containerId) {
                 
                 itemDiv.innerHTML = `
                     <img src="${item.imageurl}" alt="${item.itemname}">
+                   
                     <div class="item-details">
-                        <strong>${item.itemname}</strong>
+                        <strong>
+                         <a href="./item.html?item=${encodeURIComponent(item.itemname)}">
+                         ${item.itemname}</strong>
                         <div>Price: $${price}</div>
                         <div class="price-change ${priceChangeClass}">Price Change: ${priceChange}%</div>
                     </div>
@@ -60,8 +63,11 @@ function displayAutocompleteSuggestions(suggestions) {
         const itemDiv = document.createElement("div");
         itemDiv.textContent = suggestion;
         itemDiv.addEventListener("click", () => {
-            document.getElementById("search-bar").value = suggestion;
+
+          document.getElementById("search-bar").value = suggestion;
+          submitSearch(suggestion)
             closeAutocompleteList();
+            
         });
         list.appendChild(itemDiv);
     });
@@ -76,3 +82,8 @@ document.addEventListener("click", function(e) {
     closeAutocompleteList();
 });
 */
+
+function submitSearch(query) {
+    // Redirect to a new page with the search query as a parameter
+    window.location.href = `./item.html?item=${encodeURIComponent(query)}`;
+}
